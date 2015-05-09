@@ -1,0 +1,90 @@
+\documentclass[12pt,twoside]{article}
+\usepackage{chadstyle}  % Loads my formatting 
+%\usepackage{tweaklist}  % I use this package as well; you may need to download
+
+%% Shortcut commands
+\newcommand{\proptitle}[1]{\color{ChadBlue} \textnormal{(#1):}}
+\newtheorem{proposition}{\color{ChadGreen} Proposition}
+\newcommand{\assume}[2]{{\bf{Assumption #1}} (#2)} 
+\newcommand{\clr}[1]{{\color{ChadBlue} #1}}
+\newcommand{\clrg}[1]{{\color{ChadGreen} #1}}
+\newcommand{\Proof}[2]{\newline {\hspace{-\parindent} {\color{ChadGreen}\bf Proof of Proposition}~\ref{#1}.}
+{\color{ChadBlue} #2} \vspace{.1in}}
+
+% If you've loaded *tweaklist.sty* above, uncomment these lines:
+% Adjust spacing in itemize/enumerate; see tweaklist.sty
+%\renewcommand{\enumhook}{\setlength{\topsep}{2pt}%
+%  \setlength{\itemsep}{0pt}}
+%\renewcommand{\itemhook}{\setlength{\topsep}{2pt}%
+%  \setlength{\itemsep}{0pt}}
+
+
+
+\begin{document}
+\bibliographystyle{aernobold}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TITLE PAGE
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%\begin{singlespacing}
+\begin{spacing}{0.9}
+\begin{titlepage}
+
+\title{Sonic Multiplicities II: Logic}
+\runningheads{Andrew A. Grathwohl}{}
+
+\author{\large \href{http://about.me/agrathwohl}{Andrew A. Grathwohl}\thanks{Dan Stowell, Nick Collins, Paul Davis, sc-users mailing list}\\ {}
+   }
+
+\date{\small \today \ -- Version 0.1\\ {\it Preliminary}}
+\maketitle
+\thispagestyle{empty}
+
+%\clearpage
+\vspace{-0.3in}
+
+\begin{abstract}
+   Sonic Multiplicities II: Logic
+\end{abstract}
+
+\end{titlepage}
+\end{spacing}
+%\end{singlespacing}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Sometimes, the most important thing to do when trying to solve a problem is to step back and forget all of your formal training. It was this exact practice that I engaged in heavily while writing the Sonic Multiplicities analysis and logic cores. What I set out to do was determine an appropriate means by which to both analyze and judge a performer's choices - in real time, and with a commitment to objectivity. It didn't take long for me to discover that I had vastly overestimated the complexity of this endeavor.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Nonsense}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+I began by asking myself, ``what can we do right now?'', and began examining what all sounds emitted from a solo instrumentalist shared. What I learned was that it was very easy to plot all musical decisions from a performer on a simple circumplex chart: x = -100...0...100 (Fluid...Pristine...Percussive); y = -1...1 (Contrasing...Complimenting).
+
+The X axis is the result of analyzing each sound's timbral and pitch quality. A score of -100 (fluid) would suggest a sound that has no transient qualities. A score of 100 (percussive) suggests a sound that is mostly transient in nature, and has a very harshly-sloped release curve.
+
+The Y axis assigns each sound its current ``correctness'' rating. This is essentially a measurement that determines how much each sound contrasts with, or compliments, the overall piece at a particular moment in time.
+
+Each time the analysis engine polls the various outputs in the SM system, it prepares the results as an array and returns a comma-separated table to the Logic Engine:
+
+Sound,X,Y
+Input,35,0.70
+A,-22,0.62
+B,10,0.84
+C,32,1.0
+D,-45,0.55
+
+The ``Input'' in this example is a violinist. She is bowing with a bit less vibrato than normal, and therefore the sound has a more percussive quality. We know she is bowing with a ``less than normal'' amount of vibrato because we've been examining every sound she's made since her very first note was bowed.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+{\small
+% Put your bibiliography file here
+%\bibliography{Growth.bib}
+}
+
+\end{document}
