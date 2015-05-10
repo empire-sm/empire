@@ -121,11 +121,11 @@ Synth("dynDetect");
 
 ////GET YA STARTED\\\\
 ~out4.play;
-~out4 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1), [0.2,2.0], 0.125),1.5,2),500),Line.kr(-1,1),1.5)};
+~out4 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1), [0.2,2.0], 0.5),1.5,2),2500),0,1.5)};
 ~out4.release(6);
 //
 ~outsub.play;
-~outsub= {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1), 0.25, 1.25,0,~ampVal*4),12,4),8000),0,1.7)};
+~outsub= {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1), 0.25, 0.75,0,~ampVal*4),42,16),8000),0,1.7)};
 ~outsub.release(10);
 
 ~out5.play;
@@ -148,7 +148,8 @@ Synth("dynDetect");
 
 //NOTE: Make a good dynamics-related control variable for pbchance!
 
-y=BBCut2(CutStream2.new(pbsfunc:SQPushFXPitch2.new(0.4,pbchance:0.85)), SQPusher2.new).play(q);
+y=BBCut2(CutStream2.new(pbsfunc:SQPushFXPitch2.new(0.4,pbchance:0.85)), BBCPPermute.new(2,12,4)).play(u);
+w=BBCut2(CutStream2.new(pbsfunc:SQPushFXPitch2.new(0.7,pbchance:0.25)), BBCPPermute.new(48,256,8,12)).play(q);
 
 y.proc_(BBCutProc11.new);
 y.proc_(SQPusher1.new);
@@ -156,27 +157,49 @@ y.proc_(SQPusher2.new);
 y.proc_(WarpCutProc1.new);
 y.proc_(BBCPPermute.new(12,2,4));
 
-//y.proc_
+y.proc_(BBCPPermute.new(4,12,4));
+y.proc_(BBCPPermute.new(12,128,2,4));
+
+w.proc_(BBCPPermute.new(48,256,8,12));
 
 y.stop;
+w.stop;
+
+//y.proc_
+
+
 
 //CutMixer.new(bus, volume, ampfunc, panfunc)
 
 //w=CutGroup([CutStream1.new,CutMixer(0,1.0,Line.kr(0,1,10,20),{1.0.rand2})], BBCutProc11.new).play;
 
 (
-w = BBCut2(CutGroup([CutStream2.new(pbsfunc:SQPushFXPitch2.new(0.6,pbchance:0.65)),CutMixer(0,0.5,SQPushFXAmp2.new(1.1),CutPan1.new)]), BBCPPermute.new(16,2,4)).play(q);
+y = BBCut2(CutGroup([CutStream2.new(pbsfunc:SQPushFXPitch2.new(0.2,pbchance:0.95)),CutMixer(0,1.7,SQPushFXAmp2.new(0.1),CutPan1.new(0.2))]), BBCPPermute.new(8,64,8,4)).play(u);
 )
+
+z.stop;
+
+(
+w = BBCut2(CutGroup([CutStream2.new(pbsfunc:SQPushFXPitch2.new(0.6,pbchance:0.65)),CutMixer(0,2,SQPushFXAmp2.new(0.05),CutPan1.new)]), BBCPPermute.new(48,256,8,12)).play(q);
+)
+
+
+(
+z = BBCut2(CutGroup([CutStream2.new(pbsfunc:SQPushFXPitch2.new(0.6,pbchance:0.65)),CutMixer(0,2.5,SQPushFXAmp2.new(0.5),0)]), BBCPPermute.new(64,4,2,2)).play(r);
+)
+
+z.proc_(BBCPPermute.new(128,2,4,0.25));
+
 
 w.proc_(BBCutProc11.new);
 
 w.proc_(ChooseCutProc(5,3,2));
 
-w.proc_(BBCPPermute.new(32,12,12));
+z.proc_(BBCPPermute.new(32,12,12));
 
-w.proc_(WarpCutProc1.new);
+z.proc_(WarpCutProc1.new);
 
-w.proc_(BBCPPermute.new(16,12));
+w.proc_(BBCPPermute.new(32,128,14,4));
 
 w.stop;
 
@@ -184,7 +207,7 @@ w.free;
 
 y.stop;
 
-z=BBCut2(CutStream2.new, BBCPPermute.new(12,16)).play(u);
+z=BBCut2(CutStream2.new, BBCPPermute.new(12,16)).play(r);
 
 z.stop;
 
