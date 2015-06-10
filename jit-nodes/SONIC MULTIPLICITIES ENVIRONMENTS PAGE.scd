@@ -10,7 +10,7 @@
 ~lev1 = 0.1/~ampVal;
 ~lev2 = ~lev1 * 2.5;
 
-~mic1 = {Pan2.ar(AudioIn.ar(1),0,1.25)};
+//~mic1 = {Pan2.ar(AudioIn.ar(1),0,1.25)};
 
 )
 
@@ -23,7 +23,7 @@
 ~effect.play;
 ~effect.release(5);
 
-~m1 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1),0.2, [2.25,1.5]),2,12),Line.kr(1010,4400,12)),0,2)};
+~m1 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1),0.2, [2.25,0.5]),2,12),Line.kr(1010,4400,12)),0,2)};
 
 ~m2 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1),0.5, (7/5)/4,~ampVal),4,32),13000),0,1.5)};
 ~m2.play;
@@ -32,7 +32,7 @@
 ~m3 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1),[0.2,1.1], 5/4,~ampVal/1.5),14,32),19000),0,0.85)};
 ~m3.play;
 
-~m3 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1),[0.2,1.5], (10/5)/4,~ampVal/1.5),4,12),19000),0,1.5)};
+~m3 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1),[0.2,1.5], 1.25,~ampVal/1.5,4),4,12),19000),0,1.5)};
 
 ~l1 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1),0.35, 0.125),34,22),300),0,1.8)}; //test synth
 ~l1.play;
@@ -52,10 +52,10 @@
 
 f = Routine.run({
 	loop({
-		1.25.wait;
+		4.25.wait;
 ~effect.read(~l2); //read synth into mix var -- does it work? can we get a second one in?
-		1.5.wait;
-		~effect.read(~m1);
+		5.75.wait;
+		~effect.read(~m3);
 	})
 });
 
