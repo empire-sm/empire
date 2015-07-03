@@ -1,4 +1,3 @@
-//Environments for SM 0.1
 
 ( //setup vars
 
@@ -10,7 +9,7 @@
 ~lev1 = 0.1/~ampVal;
 ~lev2 = ~lev1 * 2.5;
 
-~mic1 = {Pan2.ar(AudioIn.ar(1),0,1.25)};
+~mic1 = {Pan2.ar(AudioIn.ar(1),0,1.25)}; //lets feed this into its own channel where it can hurt nobody
 
 )
 
@@ -23,14 +22,28 @@
 ~effect.play;
 ~effect.release(5);
 
-~m1 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1),0.2, [2.25,1.5]),2,12),Line.kr(1010,4400,12)),0,2)};
-
-~m2 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1),0.5, (7/5)/4,~ampVal),4,32),13000),0,1.5)};
-~m2.play;
 
 
-~m3 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1),[0.2,1.1], 5/4,~ampVal/1.5),14,32),19000),0,0.85)};
+
+
+
+
+
+~m1 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1),0.2, [2.25,1.5],~spec,~ampVal*1.25),12,32),8000),0,1.8)};
+
+~m1 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1),0.5, (7/5)/4,~ampVal),4,32),13000),0,1.5)};
+
+
+~m1.play;
+
+~m1.release(15);
+
+
+~m3 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1),[0.2,1.1], 5/4,~ampVal/0.25,~spec),14,64),19000),0,1.35)};
+
 ~m3.play;
+
+~m3.release(5);
 
 ~m3 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1),[0.2,1.5], (10/5)/4,~ampVal/1.5),4,12),19000),0,1.5)};
 
@@ -43,7 +56,7 @@
 
 
 ~m1.play;
-
+~m1.stop;
 
 ~l1.stop;
 
