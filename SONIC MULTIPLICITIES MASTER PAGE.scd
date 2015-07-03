@@ -36,6 +36,17 @@ u.play;
 p.pop
 
 (
+//DYNAMICS\\
+~peak = 0;      //a DAMN is triggered
+~swingh = 0;    //a new HIGH val is registered
+~swingl = 0;    //a new LOW val is registered
+~dyntime = 0;   //the time it took between a trigger and the trigger that preceded (a time diff)
+
+//TONAL\\
+~half = 0;      //pitch tracker detected a pitch lower than half of the first pitch it detected
+)
+
+(
 SynthDef("dynDetect", {
 	var mic = AudioIn.ar(1),
 	amplitude = Amplitude.kr(mic)*10,
@@ -142,11 +153,117 @@ chain = FFT(f, in);
 
 
 Synth("dynDetect");
-
 )
 
+////GET YA STARTED\\\\
+~out4.play;
+~out4 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1), [0.2,2.0], 0.25,0,0),12.5,2),2500),0,1.5)};
+~out4.release(6);
+//
+~outsub.play;
+~outsub= {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1), 0.25, 0.75,0),22,16),8000),0,1.7)};
+~outsub.release(10);
+
+~out5.play;
+~out5 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1), Line.kr(3,2,1,2.5), 1.5,0,1),2,14),17000),0,1.5)};
+~out5 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1), 0.2, 2),2,14),17000),0,2)};
+~out5.stop;
+
+~out6.play;
+~out6 = {Pan2.ar(RLPF.ar(DelayC.ar(PitchShift.ar(AudioIn.ar(1), [0.1,1.1], 1.75,~ampVal/10,~ampVal),2,12),17000),Line.kr(-1,1,~ampVal*4),1.15)};
+~out6.release(4);
 
 
+
+////BBCUT PROCS\\\\
+
+( //Preparation
+~pbsfunc = 0.25; //Amount of modulation performed on the pitch.
+~pbchance = 0.84;
+)
+
+//NOTE: Make a good dynamics-related control variable for pbchance!
+
+y=BBCut2(CutStream2.new(pbsfunc:SQPushFXPitch2.new(0.4,pbchance:0.85)), BBCPPermute.new(2,12,4)).play(u);
+w=BBCut2(CutStream2.new(pbsfunc:SQPushFXPitch2.new(0.7,pbchance:0.25)), BBCPPermute.new(48,256,8,12)).play(q);
+
+w.proc_(BBCutProc11.new);
+y.proc_(SQPusher1.new);
+y.proc_(SQPusher2.new);
+y.proc_(WarpCutProc1.new);
+y.proc_(BBCPPermute.new(12,2,4));
+
+y.proc_(BBCPPermute.new(4,12,4));
+y.proc_(BBCPPermute.new(12,128,2,4));
+
+w.proc_(BBCPPermute.new(48,256,8,12));
+
+y.stop;
+w.stop;
+
+//y.proc_
+
+
+
+//CutMixer.new(bus, volume, ampfunc, panfunc)
+
+//w=CutGroup([CutStream1.new,CutMixer(0,1.0,Line.kr(0,1,10,20),{1.0.rand2})], BBCutProc11.new).play;
+
+(
+z = BBCut2(CutGroup([CutStream2.new(pbsfunc:SQPushFXPitch2.new(0.2,pbchance:0.95)),CutMixer(0,0.7,SQPushFXAmp2.new(0.1),CutPan1.new(0.2))]), BBCPPermute.new(8,64,8,4)).play(u);
+)
+
+z.stop;
+
+(
+t = BBCut2(CutGroup([CutStream2.new(pbsfunc:SQPushFXPitch2.new(0.6,pbchance:0.65)),CutMixer(0,2,SQPushFXAmp2.new(0.05),CutPan1.new)]), BBCPPermute.new(48,256,8,12)).play(q);
+)
+
+t.stop;
+
+(
+f = BBCut2(CutGroup([CutStream2.new(pbsfunc:SQPushFXPitch2.new(0.6,pbchance:0.65)),CutMixer(0,0.5,SQPushFXAmp2.new(0.5),0)]), BBCPPermute.new(64,4,2,2)).play(r);
+)
+
+f.proc_(BBCPPermute.new(128,2,4,0.25));
+
+
+w.proc_(BBCutProc11.new);
+
+w.proc_(ChooseCutProc(5,3,2));
+
+z.proc_(BBCPPermute.new(32,12,12));
+
+z.proc_(WarpCutProc1.new);
+
+w.proc_(BBCPPermute.new(32,128,14,4));
+
+w.stop;
+
+w.free;
+
+y.stop;
+
+z=BBCut2(CutStream2.new, BBCPPermute.new(12,16)).play(r);
+
+z.stop;
+
+z.proc_(WarpCutProc1.new);
+
+z.proc_(ChooseCutProc(17,2,2));
+
+z.proc_(BBCutProc11.new);
+
+z.proc_(BBCPPermute.new(14,32,12));
+
+z.proc_(BBCPPermute.new(16,24,4));
+
+d=BBCut2(CutStream2.new, BBCPPermute.new(64,4,1.25)).play(u);
+
+d.stop;
+
+d.proc_(WarpCutProc1.new);
+d.proc_(BBCPPermute.new(32,4));
 
 ///WHERE UGENS GO TO DIE\\\
 e.free; //OSCFunc variable. kill this to kill dynamic warnings
