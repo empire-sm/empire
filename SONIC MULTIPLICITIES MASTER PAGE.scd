@@ -33,8 +33,6 @@ u = ExternalClock(TempoClock.new(120/60));
 u.play;
 )
 
-p.pop
-
 (
 //DYNAMICS\\
 ~peak = 0;      //a DAMN is triggered
@@ -94,7 +92,7 @@ e = OSCFunc({
 f = Buffer.alloc(s,2048,1);
 
 (
-{ // Now try with your own voice
+{ //Spectral flatness poller
 var in, chain;
 in = SoundIn.ar([0,1]).mean;
 chain = FFT(f, in);
@@ -174,13 +172,6 @@ Synth("dynDetect");
 ~out6.release(4);
 
 
-
-////BBCUT PROCS\\\\
-
-( //Preparation
-~pbsfunc = 0.25; //Amount of modulation performed on the pitch.
-~pbchance = 0.84;
-)
 
 //NOTE: Make a good dynamics-related control variable for pbchance!
 
